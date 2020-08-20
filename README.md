@@ -1,0 +1,1 @@
+# circleci-validation-pre-commit
