@@ -21,25 +21,28 @@ case $OSTYPE in
         ;;
 esac
 
-if [ ! -f $BINARY ]; then
+if [ ! -f "$BINARY" ] && [ ! -f "$ARCHIVE" ]; then
     echo -e "\nDownloading CircleCI CLI...\n"
     if command -v curl >/dev/null 2>&1 ; then
-        curl -L $URL -o $ARCHIVE -s
+        curl -L $URL -o "$ARCHIVE" -s
     elif command -v wget >/dev/null 2>&1; then
-        wget -O $ARCHIVE $URL &> /dev/null
+        wget -O "$ARCHIVE" $URL &> /dev/null
     else
         echo "Please install wget or curl, or manually download ${URL} to ${DIR}."
         exit 1
     fi
-    tar xzf $ARCHIVE --strip=1
+fi
+
+if [ ! -f "$BINARY" ]; then
+    tar xzf "$ARCHIVE" --strip=1 -C "$DIR"
 fi
 
 if [ ! -x BINARY ]; then
-    chmod +x $BINARY
+    chmod +x "$BINARY"
 fi
 
 if ! eMSG=$("$BINARY" config validate -c $1); then
 	echo "CircleCI Configuration Failed Validation."
-	echo $eMSG
+	echo "$eMSG"
 	exit 1
 fi
