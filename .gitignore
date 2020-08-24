@@ -1,0 +1,8 @@
+*
+
+!.gitignore
+!.editorconfig
+!.pre-commit-hooks.yaml
+!lint.sh
+!README.md
+!LICENSE

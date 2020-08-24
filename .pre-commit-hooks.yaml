@@ -1,0 +1,6 @@
+- id: circle-ci-validator
+  name: CircleCI Config Validation
+  description: Validate CircleCI config
+  entry: lint.sh
+  language: script
+  files: \.circleci/config.yml
