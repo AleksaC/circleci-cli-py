@@ -34,7 +34,13 @@ if [ ! -f "$BINARY" ] && [ ! -f "$ARCHIVE" ]; then
 fi
 
 if [ ! -f "$BINARY" ]; then
-    tar xzf "$ARCHIVE" --strip=1 -C "$DIR"
+    if [ "$OSTYPE" = "msys" ];
+    then
+        unzip -j $ARCHIVE -x "*LICENSE" -d "$DIR"
+        BINARY="$BINARY.exe"
+    else
+        tar xzf "$ARCHIVE" --strip=1 -C "$DIR"
+    fi
 fi
 
 if [ ! -x BINARY ]; then
