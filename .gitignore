@@ -3,6 +3,6 @@
 !.gitignore
 !.editorconfig
 !.pre-commit-hooks.yaml
-!lint.sh
+!validate.sh
 !README.md
 !LICENSE

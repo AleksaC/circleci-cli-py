@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 BINARY="${DIR}/circleci"
 ARCHIVE="${BINARY}.tar.gz"
 VERSION="0.1.9321"
@@ -48,7 +48,7 @@ if [ ! -x BINARY ]; then
 fi
 
 if ! eMSG=$("$BINARY" config validate -c $1); then
-	echo "CircleCI Configuration Failed Validation."
-	echo "$eMSG"
-	exit 1
+    echo "CircleCI Configuration Failed Validation."
+    echo "$eMSG"
+    exit 1
 fi
