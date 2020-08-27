@@ -1,8 +1,10 @@
-*
+.idea
+.vscode
 
-!.gitignore
-!.editorconfig
-!.pre-commit-hooks.yaml
-!validate.sh
-!README.md
-!LICENSE
+*.zip
+*.tar.gz
+
+api/
+md_docs/
+circleci
+circleci.exe
