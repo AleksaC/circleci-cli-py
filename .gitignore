@@ -8,3 +8,5 @@ api/
 md_docs/
 circleci
 circleci.exe
+
+venv
