@@ -49,6 +49,6 @@ def push_tag(version: str) -> None:
 
 if __name__ == "__main__":
     releases = get_releases()
-    for release in releases:
+    for release in reversed(releases):
         update_version(release)
         push_tag(release)
