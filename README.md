@@ -1,7 +1,7 @@
 # circleci-validation-pre-commit
 
 [pre-commit](https://pre-commit.com/) hook for validating CircleCI config using
-[CircleCI CLI](https://github.com/CircleCI-Public/circleci-cli.).
+[CircleCI CLI](https://github.com/CircleCI-Public/circleci-cli).
 
 **Note**: The validation seems to be slow so it may be a good option to run it
 as a pre-push hook. It will be extra slow on the first run as it has to download
