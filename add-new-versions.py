@@ -51,5 +51,5 @@ if __name__ == "__main__":
     releases = get_releases()
     for release in reversed(releases):
         print(f"Adding new release: {release}")
-        update_version(release)
+        update_version(release.replace("v", ""))
         push_tag(release)
