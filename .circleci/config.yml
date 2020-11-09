@@ -12,7 +12,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps
+            - deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
       - run:
           name: install requirements
           command: |
@@ -27,7 +28,7 @@ jobs:
             source venv/bin/activate
             ./add-new-versions.py
       - save_cache:
-          key: deps
+          key: deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - venv
 
