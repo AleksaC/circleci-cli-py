@@ -5,7 +5,7 @@ set -euo pipefail
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 BINARY="${DIR}/circleci"
 ARCHIVE="${BINARY}.tar.gz"
-VERSION="0.1.11458"
+VERSION="0.1.11508"
 
 BASE_URL="https://github.com/CircleCI-Public/circleci-cli/releases/download/v${VERSION}"
 case $OSTYPE in
