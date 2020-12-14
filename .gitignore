@@ -1,12 +1,11 @@
 .idea
 .vscode
 
-*.zip
-*.tar.gz
+*.pyc
+__pycache__
 
-api/
-md_docs/
-circleci
-circleci.exe
+*.egg-info
 
 venv
+
+.tox
