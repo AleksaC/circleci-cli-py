@@ -1,18 +1,40 @@
 # circleci-validation-pre-commit
 
-[pre-commit](https://pre-commit.com/) hook for validating CircleCI config using
-[CircleCI CLI](https://github.com/CircleCI-Public/circleci-cli).
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Test Status](https://dev.azure.com/aleksac/aleksa-oss/_apis/build/status/AleksaC.circleci-validation-pre-commit?branchName=master)](https://dev.azure.com/aleksac/aleksa-oss/_build?definitionId=10&_a=summary)
+[![Autoupdater Status](https://circleci.com/gh/AleksaC/circleci-validation-pre-commit.svg?style=svg)](https://circleci.com/gh/AleksaC/circleci-validation-pre-commit)
 
-**Note**: The validation seems to be slow so it may be a good option to run it
-as a pre-push hook. It will be extra slow on the first run as it has to download
-and extract the CLI binary.
+A python package that provides a pip-installable
+[CircleCI CLI](https://github.com/CircleCI-Public/circleci-cli) binary.
 
-## Usage
+The mechanism by which the binary is downloaded is basically copied from
+[shellcheck-py](https://github.com/shellcheck-py/shellcheck-py).
+
+## Getting started
+
+### Installation
+
+The package hasn't been published to PyPI yet, and may never be, as its primary
+purpose doesn't require it. However you can install it through git:
+
+```shell script
+pip install git+git://github.com/AleksaC/circleci-validation-pre-commit.git@v0.1.11508
+```
+
+To install another version simply replace the `v0.1.11508` with the version you want.
+
+### With pre-commit
+
+This package was primarily built to provide a convenient way of running hadolint
+as a [pre-commit](https://pre-commit.com) hook, since pre-commit seems unable to
+install it as a golang hook.
+
 Example `.pre-commit-config.yaml`:
+
 ```yaml
 repos:
   - repo: https://github.com/AleksaC/circleci-validation-pre-commit
-    rev: master
+    rev: v0.1.11508
     hooks:
       - id: circle-ci-validator
 ```
