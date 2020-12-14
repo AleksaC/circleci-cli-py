@@ -1,6 +1,6 @@
 - id: circle-ci-validator
   name: CircleCI Config Validation
   description: Validate CircleCI config
-  entry: validate.sh
-  language: script
+  entry: circleci config validate -c
+  language: python
   files: \.circleci/config.yml
