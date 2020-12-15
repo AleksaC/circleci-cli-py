@@ -17,7 +17,7 @@ from setuptools.command.install import install as orig_install
 
 
 CIRCLECI_CLI_VERSION = "0.1.11508"
-POSTFIX_SHA256 = {
+ARCHIVE_SHA256 = {
     "linux": (
         "circleci-cli_0.1.11508_linux_amd64.tar.gz",
         "136463ba2bd8f7d0b9486b02c2c71dbb7a66602e3910bc96afdc641a1101ce7c",
@@ -31,14 +31,13 @@ POSTFIX_SHA256 = {
         "afd959c57deb5869886c5e0ee3bbdfed066b0009ba769839de2662935f9f3264",
     ),
 }
-PY_VERSION = "1"
 
 
 def get_download_url() -> str:
-    postfix, sha256 = POSTFIX_SHA256[sys.platform]
+    archive, sha256 = ARCHIVE_SHA256[sys.platform]
     url = (
         f"https://github.com/CircleCI-Public/circleci-cli/releases/download/"
-        f"v{CIRCLECI_CLI_VERSION}/{postfix}"
+        f"v{CIRCLECI_CLI_VERSION}/{archive}"
     )
     return url, sha256
 
@@ -163,4 +162,4 @@ try:
 except ImportError:
     pass
 
-setup(version=f"{CIRCLECI_CLI_VERSION}.{PY_VERSION}", cmdclass=command_overrides)
+setup(version=f"{CIRCLECI_CLI_VERSION}", cmdclass=command_overrides)
