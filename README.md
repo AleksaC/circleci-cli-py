@@ -1,8 +1,8 @@
-# circleci-validation-pre-commit
+# circleci-cli-py
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Test Status](https://dev.azure.com/aleksac/aleksa-oss/_apis/build/status/AleksaC.circleci-validation-pre-commit?branchName=master)](https://dev.azure.com/aleksac/aleksa-oss/_build?definitionId=10&_a=summary)
-[![Autoupdater Status](https://circleci.com/gh/AleksaC/circleci-validation-pre-commit.svg?style=svg)](https://circleci.com/gh/AleksaC/circleci-validation-pre-commit)
+[![Test Status](https://dev.azure.com/aleksac/aleksa-oss/_apis/build/status/AleksaC.circleci-cli-py?branchName=master)](https://dev.azure.com/aleksac/aleksa-oss/_build?definitionId=11&_a=summary)
+[![Autoupdater Status](https://circleci.com/gh/AleksaC/circleci-cli-py.svg?style=svg)](https://circleci.com/gh/AleksaC/circleci-cli-py)
 
 A python package that provides a pip-installable
 [CircleCI CLI](https://github.com/CircleCI-Public/circleci-cli) binary.
@@ -18,10 +18,8 @@ The package hasn't been published to PyPI yet, and may never be, as its primary
 purpose doesn't require it. However you can install it through git:
 
 ```shell script
-pip install git+git://github.com/AleksaC/circleci-validation-pre-commit.git@v0.1.11508
+pip install git+git://github.com/AleksaC/circleci-cli-py.git@v0.1.11540
 ```
-
-To install another version simply replace the `v0.1.11508` with the version you want.
 
 ### With pre-commit
 
@@ -33,8 +31,8 @@ Example `.pre-commit-config.yaml`:
 
 ```yaml
 repos:
-  - repo: https://github.com/AleksaC/circleci-validation-pre-commit
-    rev: v0.1.11508
+  - repo: https://github.com/AleksaC/circleci-cli-py
+    rev: v0.1.11540
     hooks:
       - id: circle-ci-validator
 ```
