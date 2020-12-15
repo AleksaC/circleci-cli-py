@@ -110,7 +110,7 @@ def update_file_tokenize(file_path: str) -> str:
 def update_archive_sha(version: str) -> None:
     archive_sha256_str = update_file_tokenize("setup.py")
     archive_sha256_dict: Dict[str, Tuple[str, str]] = ast.literal_eval(
-        "{" + archive_sha256_str[archive_sha256_str.find("{") + 1 :]
+        archive_sha256_str[archive_sha256_str.find("{") :]
     )
     checksums = get_checksums(version)
 
