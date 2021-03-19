@@ -92,7 +92,7 @@ class build(orig_build):
 
 
 class install(orig_install):
-    sub_commands = orig_install.sub_commands + [("install_shellcheck", None)]
+    sub_commands = orig_install.sub_commands + [("install_circleci_cli", None)]
 
 
 class fetch_binaries(Command):
@@ -113,7 +113,7 @@ class fetch_binaries(Command):
         save_executable(data, self.build_temp)
 
 
-class install_shellcheck(Command):
+class install_circleci_cli(Command):
     description = "install the shellcheck executable"
     outfiles = ()
     build_dir = install_dir = None
@@ -138,7 +138,7 @@ class install_shellcheck(Command):
 
 command_overrides = {
     "install": install,
-    "install_shellcheck": install_shellcheck,
+    "install_circleci_cli": install_circleci_cli,
     "build": build,
     "fetch_binaries": fetch_binaries,
 }
