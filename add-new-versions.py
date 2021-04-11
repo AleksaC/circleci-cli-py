@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import ast
+import base64
 import io
 import json
 import os
@@ -23,8 +24,14 @@ def get(url: str, headers: dict) -> dict:
 
 
 def get_releases() -> List[str]:
+    gh_token = os.environ["GH_TOKEN"]
+    auth = base64.b64encode(f"AleksaC:{gh_token}".encode()).decode()
+
     base_url = "https://api.github.com/repos/{}/{}/{}"
-    headers = {"Accept": "application/vnd.github.v3+json"}
+    headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Basic {auth}",
+    }
 
     circleci_cli_releases = get(
         base_url.format("CircleCI-Public", "circleci-cli", "releases"), headers=headers
