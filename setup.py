@@ -16,19 +16,19 @@ from setuptools import setup
 from setuptools.command.install import install as orig_install
 
 
-CIRCLECI_CLI_VERSION = "0.1.15801"
+CIRCLECI_CLI_VERSION = "0.1.15824"
 ARCHIVE_SHA256 = {
     "linux": (
-        "circleci-cli_0.1.15801_linux_amd64.tar.gz",
-        "483940d10cb15a9df32b2ecc7c18aa8c5c8ed72d703b722f8f8ababc95f4f50c",
+        "circleci-cli_0.1.15824_linux_amd64.tar.gz",
+        "7b72440da933305f4fcfd902571cd4c3e94f1a223c4ceea8cca7bf95514955d4",
     ),
     "darwin": (
-        "circleci-cli_0.1.15801_darwin_amd64.tar.gz",
-        "e2311f3c6f73c5f4c52a7220c97a42e1bbd173416aeeebf5f414d4d64cdd5131",
+        "circleci-cli_0.1.15824_darwin_amd64.tar.gz",
+        "4fee74d7153ad5ecb58cc011decb2ba2387f838fc751411f828bc6bd48b79de0",
     ),
     "win32": (
-        "circleci-cli_0.1.15801_windows_amd64.zip",
-        "e81cf0ff210708f4d33d0db4afd7de05caba63485bd4aa94554a886a21e6bfea",
+        "circleci-cli_0.1.15824_windows_amd64.zip",
+        "b10ab987e4e217c275f140ff26bd95d39f4697e679085e231edd4a2aa88c4a97",
     ),
 }
 
