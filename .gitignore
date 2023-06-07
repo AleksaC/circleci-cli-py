@@ -11,3 +11,5 @@ venv
 .tox
 
 .mypy_cache
+
+build
