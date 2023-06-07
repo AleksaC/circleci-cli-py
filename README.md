@@ -1,7 +1,7 @@
 # circleci-cli-py
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Test Status](https://dev.azure.com/aleksac/aleksa-oss/_apis/build/status/AleksaC.circleci-cli-py?branchName=master)](https://dev.azure.com/aleksac/aleksa-oss/_build?definitionId=11&_a=summary)
+[![Run tests](https://github.com/AleksaC/circleci-cli-py/actions/workflows/tests.yml/badge.svg)](https://github.com/AleksaC/circleci-cli-py/actions/workflows/tests.yml)
 [![Autoupdater Status](https://circleci.com/gh/AleksaC/circleci-cli-py.svg?style=svg)](https://circleci.com/gh/AleksaC/circleci-cli-py)
 
 A python package that provides a pip-installable

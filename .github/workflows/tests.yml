@@ -2,7 +2,7 @@ name: Run tests
 
 on:
   push:
-    branches: [move-to-gh-actions]
+    branches: [master]
   workflow_dispatch:
 
 defaults:
