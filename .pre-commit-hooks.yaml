@@ -3,4 +3,4 @@
   description: Validate CircleCI config without having to install the cli globally
   entry: env CIRCLECI_CLI_SKIP_UPDATE_CHECK=true circleci config validate -c
   language: python
-  files: \.circleci/config.yml
+  files: \.circleci/*
