@@ -75,7 +75,7 @@ def extract(url: str, data: bytes) -> bytes:
 def save_executable(data: bytes, base_dir: str):
     exe = "circleci" if sys.platform != "win32" else "circleci.exe"
     output_path = os.path.join(base_dir, exe)
-    os.makedirs(base_dir)
+    os.makedirs(base_dir, exist_ok=True)
 
     with open(output_path, "wb") as fp:
         fp.write(data)
