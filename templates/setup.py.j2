@@ -16,9 +16,9 @@ from setuptools import setup
 from setuptools.command.install import install as orig_install
 
 
-VERSION = "0.1.30549"
-ARCHIVE_SHA256 = {'windows_amd64': ('circleci-cli_0.1.30549_windows_amd64.zip', '0c554a10d3d8cb7a4d330c6d4f9a0b218e830dd45175d8f2d743abd338842364'), 'windows_arm64': ('circleci-cli_0.1.30549_windows_arm64.zip', '15a0ee5c8578617f160dab264c5cb7baeb7d5869ea30b49a02805c083b2afa97'), 'linux_arm64': ('circleci-cli_0.1.30549_linux_arm64.tar.gz', '649496a32305c539df9c66f737f74a8852dd73e53c14e7d95b77c0e2d7790d38'), 'darwin_arm64': ('circleci-cli_0.1.30549_darwin_arm64.tar.gz', '692236f5aaf7f62ebc5fc48fb5dfb55a412e8aa4361c8ba65f0f92a459002c1d'), 'linux_amd64': ('circleci-cli_0.1.30549_linux_amd64.tar.gz', '807c98f96a54b2d63e54a068e215eac2af9c529f59529ad6474c4d73d8caf93c'), 'darwin_amd64': ('circleci-cli_0.1.30549_darwin_amd64.tar.gz', '924e3f3cd375902cb564f9becebe6e98faaab319456375214885b44150628779')}
-RELEASES_BASE_URL = "https://github.com/CircleCI-Public/circleci-cli/releases/download"
+VERSION = "{{ version }}"
+ARCHIVE_SHA256 = {{archives}}
+RELEASES_BASE_URL = "{{ base_url }}"
 
 
 def get_download_url() -> str:
