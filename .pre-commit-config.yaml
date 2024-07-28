@@ -3,11 +3,17 @@ repos:
     rev: 24.4.2
     hooks:
       - id: black
+        types_or: [text]
+        exclude: setup.py$
+        files: ^.*\.py(\.j2)?$
 
   - repo: https://github.com/timothycrosley/isort
     rev: 5.13.2
     hooks:
       - id: isort
+        types_or: [text]
+        exclude: setup.py$
+        files: ^.*\.py(\.j2)?$
 
   - repo: https://github.com/asottile/setup-cfg-fmt
     rev: v2.5.0

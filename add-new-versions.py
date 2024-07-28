@@ -1,171 +1,214 @@
 #!/usr/bin/env python
 
-import ast
+import argparse
 import base64
-import io
+import itertools
 import json
 import os
 import re
-import tokenize
+import subprocess
+import sys
 from urllib.request import Request
 from urllib.request import urlopen
 
-from typing import Dict
-from typing import Iterable
-from typing import List
-from typing import Tuple
-from typing import Union
+from typing import Any
+from typing import NamedTuple
+from typing import Optional
+
+import jinja2
 
 
-def get(url: str, headers: dict) -> dict:
+VERSION_RE = re.compile(r"^v?(?P<major>[0-9]+)\.(?P<minor>[0-9]+)\.(?P<patch>[0-9]+)$")
+
+OS = ("darwin", "linux", "windows")
+ARCH = ("amd64", "arm64")
+
+TEMPLATES_DIR = "templates"
+
+REPO = "CircleCI-Public/circleci-cli"
+MIRROR_REPO = "AleksaC/circleci-cli-py"
+RELEASES_BASE_URL = "https://github.com/CircleCI-Public/circleci-cli/releases/download"
+
+MIN_VERSION = "v0.1.9321"
+
+
+class Version(NamedTuple):
+    major: int
+    minor: int
+    patch: int
+
+    @classmethod
+    def from_string(cls, version: str) -> "Version":
+        if match := re.match(VERSION_RE, version):
+            return cls(*map(int, match.groups()))
+
+        raise ValueError("Invalid version", version)
+
+    def __repr__(self):
+        return f"{self.major}.{self.minor}.{self.patch}"
+
+
+class Template(NamedTuple):
+    src: str
+    dest: str
+    vars: dict[str, Any]
+
+
+def _get(url: str, headers: Optional[dict[str, str]] = None) -> dict:
+    if headers is None:
+        headers = {}
+
     req = Request(url, headers=headers)
     resp = urlopen(req, timeout=30)
-    return json.loads(resp.read())
+
+    return resp
 
 
-def get_releases() -> List[str]:
+def get_json(url: str, headers: Optional[dict[str, str]] = None) -> dict:
+    return json.loads(_get(url, headers).read())
+
+
+def get_text(url: str, headers: Optional[dict[str, str]] = None) -> str:
+    return _get(url, headers).read().decode()
+
+
+def git(*args: str) -> None:
+    subprocess.run(["git", *args], check=True)
+
+
+def get_archive_format(os: str) -> str:
+    if os == "windows":
+        return "zip"
+    return "tar.gz"
+
+
+def get_versions(repo: str, *, from_releases: bool = True) -> list[str]:
     gh_token = os.environ["GH_TOKEN"]
     auth = base64.b64encode(f"AleksaC:{gh_token}".encode()).decode()
-
-    base_url = "https://api.github.com/repos/{}/{}/{}"
+    base_url = "https://api.github.com/repos/{}/{}?per_page=100&page={}"
     headers = {
         "Accept": "application/vnd.github.v3+json",
         "Authorization": f"Basic {auth}",
     }
 
-    circleci_cli_releases = get(
-        base_url.format("CircleCI-Public", "circleci-cli", "releases"), headers=headers
-    )
-
-    hook_tags = get(
-        base_url.format("AleksaC", "circleci-validation-pre-commit", "tags"),
+    releases = []
+    page = 1
+    while releases_page := get_json(
+        base_url.format(repo, "releases" if from_releases else "tags", page),
         headers=headers,
-    )
+    ):
+        releases.extend(releases_page)
+        page += 1
 
-    new_releases = []
-    latest = hook_tags[0]["name"]
-    for release in circleci_cli_releases:
-        version = release["tag_name"]
-        if version == latest:
-            break
-        new_releases.append(version)
-
-    return new_releases
-
-
-def get_checksums(version: str) -> dict:
-    checksum_url = (
-        f"https://github.com/CircleCI-Public/circleci-cli/releases/download/"
-        f"v{version}/circleci-cli_{version}_checksums.txt"
-    )
-
-    req = Request(checksum_url)
-    resp = urlopen(req, timeout=30)
-    checksums = resp.read().decode()
-
-    checksum_re = re.compile(
-        r"(?P<sha>[A-Fa-f0-9]{64})  "
-        r"(?P<file>circleci-cli_[0-9]+\.[0-9]+\.[0-9]+_"
-        r"(?P<platform>darwin|windows|linux)_amd64(\.tar\.gz|\.zip))\n"
-    )
-
-    archive_sha = {}
-
-    for match in re.findall(checksum_re, checksums):
-        sha, archive, platform, _ = match
-        archive_sha[platform] = (archive, sha)
-
-    return archive_sha
-
-
-def update_file(
-    file_path: str, replacements: Iterable[Tuple[Union[re.Pattern, str], str]]
-) -> None:
-    with open(file_path, "r+") as f:
-        old = f.read()
-        new = old
-        for pattern, replacement in replacements:
-            new = re.sub(
-                pattern,
-                replacement,
-                new,
-            )
-        f.seek(0)
-        f.write(new)
-        f.truncate()
-
-
-def update_file_tokenize(file_path: str) -> str:
-    with open(file_path, "r+") as f:
-        contents = io.StringIO(f.read())
-        tokens = tokenize.generate_tokens(contents.readline)
-        lines = []
-        while True:
-            token = next(tokens)
-            if token.type == 1 and token.string == "ARCHIVE_SHA256":
-                while True:
-                    lines.append(token.line)
-                    next_token = next(tokens)
-                    while next_token.line == token.line:
-                        next_token = next(tokens)
-                    token = next_token
-                    if token.type == 54 and token.string == "}":
-                        lines.append(token.string)
-                        return "".join(lines)
-
-
-def update_archive_sha(version: str) -> None:
-    archive_sha256_str = update_file_tokenize("setup.py")
-    archive_sha256_dict: Dict[str, Tuple[str, str]] = ast.literal_eval(
-        archive_sha256_str[archive_sha256_str.find("{") :]
-    )
-    checksums = get_checksums(version)
-
-    archive_sha256_new = archive_sha256_str
-    for platform in checksums:
-        old_archive, old_sha = archive_sha256_dict[
-            "win32" if platform == "windows" else platform
+    if from_releases:
+        return [
+            release["tag_name"]
+            for release in releases
+            if not release["draft"] and not release["prerelease"]
         ]
-        new_archive, new_sha = checksums[platform]
 
-        archive_sha256_new = archive_sha256_new.replace(old_archive, new_archive)
-        archive_sha256_new = archive_sha256_new.replace(old_sha, new_sha)
-
-    with open("setup.py", "r+") as f:
-        contents = f.read()
-        f.seek(0)
-        f.write(contents.replace(archive_sha256_str, archive_sha256_new))
-        f.truncate()
+    return [release["name"] for release in releases]
 
 
-def update_version(version: str) -> None:
-    update_archive_sha(version)
-    update_file(
-        "setup.py",
-        [
-            (
-                r"CIRCLECI_CLI_VERSION = \"[0-9]+\.[0-9]+\.[0-9]+\"\n",
-                f'CIRCLECI_CLI_VERSION = "{version}"\n',
-            )
-        ],
+def get_missing_versions(
+    repo: str, mirror_repo: str, min_version: Optional[Version]
+) -> list[Version]:
+    versions = get_versions(repo)
+    mirrored = set(
+        map(Version.from_string, get_versions(mirror_repo, from_releases=False))
     )
-    update_file(
-        "README.md",
-        [
-            (r"rev: v[0-9]+\.[0-9]+\.[0-9]+", f"rev: v{version}"),
-            (r"@v[0-9]+\.[0-9]+\.[0-9]+", f"@v{version}"),
-        ],
+    missing = []
+
+    for v in reversed(versions):
+        version = Version.from_string(v)
+
+        if min_version and version < min_version:
+            continue
+
+        if version not in mirrored:
+            missing.append(version)
+
+    return missing
+
+
+def get_archives(version: Version) -> dict[str, tuple[str, str]]:
+    checksum_url = (
+        f"{RELEASES_BASE_URL}/v{version}/circleci-cli_{version}_checksums.txt"
     )
+    checksums = get_text(checksum_url).splitlines()
+
+    versions = {
+        f"circleci-cli_{version}_{os}_{arch}.{get_archive_format(os)}": (os, arch)
+        for os, arch in itertools.product(OS, ARCH)
+    }
+
+    archives = {}
+
+    for checksum in checksums:
+        sha, archive = checksum.split()
+        if archive in versions:
+            os, arch = versions[archive]
+            archives[f"{os}_{arch}"] = (archive, sha)
+
+    return archives
 
 
-def push_tag(version: str) -> None:
-    os.system(f"./tag.sh {version}")
+def render_templates(templates: list[Template]) -> None:
+    for src, dest, vars in templates:
+        with open(os.path.join(TEMPLATES_DIR, src)) as f:
+            template_file = f.read()
+
+        template = jinja2.Template(template_file, keep_trailing_newline=True)
+
+        with open(dest, "w") as f:
+            f.write(template.render(**vars))
+
+
+def tag_version(version: str) -> None:
+    git("add", "-u")
+    git("commit", "-m", f"Add version {version}")
+    git("tag", version)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--push", default=False, action="store_true")
+    args = parser.parse_args(argv)
+
+    versions = get_missing_versions(REPO, MIRROR_REPO, Version.from_string(MIN_VERSION))
+
+    for version in versions:
+        print(f"Adding new version: v{version}")
+
+        archives = get_archives(version)
+
+        render_templates(
+            [
+                Template(
+                    src="setup.py.j2",
+                    dest="setup.py",
+                    vars={
+                        "version": str(version),
+                        "archives": str(archives),
+                        "base_url": RELEASES_BASE_URL,
+                    },
+                ),
+                Template(
+                    src="README.md.j2",
+                    dest="README.md",
+                    vars={"version": str(version)},
+                ),
+            ]
+        )
+
+        tag_version(f"v{version}")
+
+        if args.push:
+            git("push")
+            git("push", "--tags")
+
+    return 0
 
 
 if __name__ == "__main__":
-    releases = get_releases()
-
-    for release in reversed(releases):
-        print(f"Adding new release: {release}")
-        update_version(release.replace("v", ""))
-        push_tag(release)
+    sys.exit(main())
