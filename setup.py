@@ -16,8 +16,8 @@ from setuptools import setup
 from setuptools.command.install import install as orig_install
 
 
-VERSION = "0.1.31792"
-ARCHIVE_SHA256 = {'windows_arm64': ('circleci-cli_0.1.31792_windows_arm64.zip', '3a9df49b72320cd11d12767e396135b2b40555bef49ab6b476aced7d027073ba'), 'linux_arm64': ('circleci-cli_0.1.31792_linux_arm64.tar.gz', '432eb9105c85cc68c79196a9b1e86df2c13aa45053ba11c348e89fecdca4c2b3'), 'darwin_amd64': ('circleci-cli_0.1.31792_darwin_amd64.tar.gz', '5a11c521ec2145359cefb57f55bea15eb6d9b314a349b3c5824f978a85e8f8c1'), 'windows_amd64': ('circleci-cli_0.1.31792_windows_amd64.zip', '6fdeae76fbd9707ce0af0d392a58afb198b2fae5829a285c0fdd8a2c8d12ba94'), 'linux_amd64': ('circleci-cli_0.1.31792_linux_amd64.tar.gz', '8546158da4cd5385f4e8eb73ec7dc79ec24bd7615c458b3268f05a726d67eff1'), 'darwin_arm64': ('circleci-cli_0.1.31792_darwin_arm64.tar.gz', 'f8d0102ccfebfa87e31e63f54fd6192954106e5783a1c8be07852e225d218ee0')}
+VERSION = "0.1.31879"
+ARCHIVE_SHA256 = {'darwin_amd64': ('circleci-cli_0.1.31879_darwin_amd64.tar.gz', '363c076b9d6095f122748268876c38a98f2bd89de458aecabd6297755ea96fad'), 'linux_amd64': ('circleci-cli_0.1.31879_linux_amd64.tar.gz', '444cfbbab4bc54114aa22efd40890aa8b85eb3779aa74570993709a155758750'), 'darwin_arm64': ('circleci-cli_0.1.31879_darwin_arm64.tar.gz', '625d32a61c06c5ddb7b755812ed2293cc94772dabc9ed4706e8c121a46bfbe2c'), 'windows_amd64': ('circleci-cli_0.1.31879_windows_amd64.zip', '82c3bcf827ef5a2978e70023aa4d2c7fdb86dd78e6a790762d3d7f9e6cd1f04f'), 'linux_arm64': ('circleci-cli_0.1.31879_linux_arm64.tar.gz', 'be7548a8b26576d45dea38d365e0b1d740007043ab4a96055de3914e65934c81'), 'windows_arm64': ('circleci-cli_0.1.31879_windows_arm64.zip', 'd1dce1f8f15fdbdcd0ab04404768cf7ee003848a021514cb6fba13a598c49a1c')}
 RELEASES_BASE_URL = "https://github.com/CircleCI-Public/circleci-cli/releases/download"
 
 
