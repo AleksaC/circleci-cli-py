@@ -18,7 +18,7 @@ The package hasn't been published to PyPI yet, and may never be, as its primary
 purpose doesn't require it. However you can install it through git:
 
 ```shell script
-pip install git+git://github.com/AleksaC/circleci-cli-py.git@v0.1.33470
+pip install git+git://github.com/AleksaC/circleci-cli-py.git@v0.1.33494
 ```
 
 ### With pre-commit
@@ -32,7 +32,7 @@ Example `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/AleksaC/circleci-cli-py
-    rev: v0.1.33470
+    rev: v0.1.33494
     hooks:
       - id: circle-ci-validator
 ```
