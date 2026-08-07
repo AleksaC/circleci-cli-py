@@ -1,3 +1,6 @@
+> [!WARNING]
+> This project has been archived. I haven't used it in a long time and don't have bandwidth to maintain it.
+
 # circleci-cli-py
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
